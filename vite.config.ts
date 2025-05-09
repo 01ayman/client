@@ -12,8 +12,8 @@ export default defineConfig({
   //     wasm: "application/wasm",
   //   },
   // },
-  // base:
-  //   process.env.VITE_ENVIRONMENT === "production"
-  //     ? "https://01ayman.github.io/client"
-  //     : "/",
+  base:
+    process.env.VITE_ENVIRONMENT === "production"
+      ? "https://chesslearn.netlify.app"
+      : "/",
 });
