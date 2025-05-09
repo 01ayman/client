@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 export const Header = () => {
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
-  const logo = "./../public/logo_blanco.png";
+  const logo = "/public/logo_blanco.png";
   return (
     <header>
       <a

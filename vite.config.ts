@@ -14,6 +14,6 @@ export default defineConfig({
   // },
   base:
     process.env.VITE_ENVIRONMENT === "production"
-      ? "https://01ayman.github.io/client/"
+      ? "https://01ayman.github.io/client"
       : "/",
 });
