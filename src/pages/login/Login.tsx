@@ -64,7 +64,8 @@ const Login = () => {
     setError("");
     setVerifyMessage("");
     setLoading(true); // Activar loader
-
+    console.log(API_URL);
+    console.log(isProduction);
     if (!user || !password) {
       alert("Por favor, completa todos los campos.");
       setLoading(false);
@@ -77,8 +78,6 @@ const Login = () => {
     };
 
     try {
-      console.log(isProduction);
-      console.log(urlLogin);
       const response = await fetch(urlLogin, {
         method: "POST",
         headers: {
