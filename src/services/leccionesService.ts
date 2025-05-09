@@ -1,5 +1,7 @@
 // import { LeccionesData } from "../pages/lecciones/Lecciones";
 
+import { API_URL } from "../constants/GlobalConstants";
+
 // Tipos base
 export interface Ejercicio {
   id: number;
@@ -26,13 +28,12 @@ export interface ProgresoLeccion {
 }
 
 // URL base
-const API_URL = `${import.meta.env.VITE_API_URL}lecciones`;
 
 // ---- Lecciones ----
 
 export async function getLecciones(): Promise<Leccion[]> {
   try {
-    const res = await fetch(API_URL);
+    const res = await fetch(API_URL + "lecciones");
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
     return await res.json();
   } catch (err) {
@@ -45,7 +46,7 @@ export async function getLecciones(): Promise<Leccion[]> {
 
 export async function getEjercicios(): Promise<Ejercicio[]> {
   try {
-    const res = await fetch(`${API_URL}/ejercicios`);
+    const res = await fetch(`${API_URL}lecciones/ejercicios`);
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
     return await res.json();
   } catch (err) {
@@ -58,7 +59,7 @@ export async function getEjerciciosByLeccionId(
   leccionId: number
 ): Promise<Ejercicio[]> {
   try {
-    const res = await fetch(`${API_URL}/${leccionId}/ejercicios`);
+    const res = await fetch(`${API_URL}lecciones/${leccionId}/ejercicios`);
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
     return await res.json();
   } catch (err) {
@@ -77,7 +78,7 @@ export async function updateLessonProgress(
   ejercicioId: number
 ): Promise<ProgresoLeccion> {
   try {
-    const res = await fetch(`${API_URL}/ejercicios`, {
+    const res = await fetch(`${API_URL}ejercicios`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -99,7 +100,7 @@ export async function getProgresoLeccion(
   leccionId: number
 ): Promise<ProgresoLeccion[]> {
   try {
-    const res = await fetch(`${API_URL}/${usuarioId}/${leccionId}`);
+    const res = await fetch(`${API_URL}${usuarioId}/${leccionId}`);
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
     const data = await res.json();
     console.log(data);
@@ -115,7 +116,7 @@ export async function getProgresoLeccion(
 
 // ---- Carga completa para LeccionesData ----
 
-export async function loadCompleteLeccionesData(usuarioId = 0): Promise<any> {
+export async function loadCompleteLeccionesData(): Promise<any> {
   try {
     const [lecciones, ejercicios] = await Promise.all([
       getLecciones(),

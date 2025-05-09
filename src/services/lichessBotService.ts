@@ -1,5 +1,4 @@
-import { fetchEventSource } from "@microsoft/fetch-event-source";
-import { useEffect, useState } from "react";
+import { API_URL } from "../constants/GlobalConstants";
 
 // src/services/lichessService.ts
 interface GameSettings {
@@ -112,7 +111,7 @@ export async function makeMove(
 }
 
 export function streamGame(gameId: string, handlers: GameHandlers): () => void {
-  const url = `${import.meta.env.VITE_API_URL}lichess/stream/${gameId}`;
+  const url = `${API_URL}lichess/stream/${gameId}`;
   const eventSource = new EventSource(url, { withCredentials: true });
 
   eventSource.onmessage = (event) => {
@@ -144,7 +143,7 @@ export function streamGame(gameId: string, handlers: GameHandlers): () => void {
   // const controller = new AbortController();
   // const signal = controller.signal;
 
-  // const streamUrl = `${import.meta.env.VITE_API_URL}lichess/stream/${gameId}`;
+  // const streamUrl = `${API_URL}lichess/stream/${gameId}`;
 
   // fetch(streamUrl, {
   //   method: "GET",

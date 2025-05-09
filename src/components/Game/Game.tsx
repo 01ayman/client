@@ -1,14 +1,12 @@
 // src/components/Game.tsx
 
 import { useEffect, useState, useCallback } from "react";
-import { Chess, Move } from "chess.js";
+import { Chess } from "chess.js";
 import Tablero from "../Tablero/Tablero";
 import PanelGame from "./PanelGame";
 import {
-  createGame,
   makeMove,
   streamGame,
-  terminarPartida,
 } from "../../services/lichessBotService";
 import "./Game.css";
 import { usePartida } from "../../context/PartidaContext";
@@ -53,7 +51,7 @@ const Game = () => {
     const cleanup = streamGame(partida.id, {
       onMessage: (event: any) => {
         console.log("Evento recibido:", event);
-        const myTime = `${playerColor}time`;
+        // const myTime = `${playerColor}time`;
         if (
           (event.wtime = 0 && playerColor == "w") ||
           (event.btime = 0 && playerColor == "b")

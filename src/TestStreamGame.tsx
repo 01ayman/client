@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const TestStreamGame = ({ gameId }: { gameId: string }) => {
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  // const [ws, setWs] = useState<WebSocket | null>(null);
   const [gameState, setGameState] = useState<any>(null);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const TestStreamGame = ({ gameId }: { gameId: string }) => {
       console.log("Conexión WebSocket cerrada");
     };
 
-    setWs(socket);
+    // setWs(socket);
 
     // Cleanup: cerrar WebSocket cuando el componente se desmonte
     return () => {

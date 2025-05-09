@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../constants/GlobalConstants";
 
 type Usuario = {
   id: number;
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUser = async (jwtToken: string) => {
     try {
-      const res = await fetch("http://localhost:3001/api/usuarios/me", {
+      const res = await fetch(API_URL + "usuarios/me", {
         headers: { Authorization: `Bearer ${jwtToken}` },
       });
 

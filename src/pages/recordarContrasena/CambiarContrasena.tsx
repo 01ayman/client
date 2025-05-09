@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./CambiarContrasena.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../../constants/GlobalConstants";
 
-const urlEmail = import.meta.env.VITE_API_URL + "auth/cambiar-contrasena";
+const urlEmail = API_URL + "auth/cambiar-contrasena";
 
 const CambiarContrasena = () => {
   const { id, token } = useParams();

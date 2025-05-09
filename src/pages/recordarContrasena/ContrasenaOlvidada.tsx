@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./CambiarContrasena.css";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../constants/GlobalConstants";
 
-const urlEmail = import.meta.env.VITE_API_URL + "auth/enviar-correo-contrasena";
+const urlEmail = API_URL + "auth/enviar-correo-contrasena";
 
 const ContrasenaOlvidada = () => {
   const [email, setEmail] = useState(localStorage.getItem("login_user") ?? "");

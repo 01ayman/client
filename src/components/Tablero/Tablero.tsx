@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Chess, Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import "./Tablero.css";
-import { Piece } from "react-chessboard/dist/chessboard/types";
 
 interface Props {
   game: Chess;

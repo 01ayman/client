@@ -5,10 +5,10 @@ import { Message } from "../../components/Utils/Message";
 import ChessError from "../../components/Utils/Error";
 import { useAuth } from "../../context/AuthContext";
 import { Loader } from "../../components/Utils/Loader"; // Importa el componente Loader
+import { API_URL, isProduction } from "../../constants/GlobalConstants";
 
-const urlLogin = import.meta.env.VITE_API_URL + "auth/login";
-const urlEmail =
-  import.meta.env.VITE_API_URL + "auth/enviar-correo-verificacion";
+const urlLogin = API_URL + "auth/login";
+const urlEmail = API_URL + "auth/enviar-correo-verificacion";
 
 const Login = () => {
   const { id, token } = useParams();
@@ -77,6 +77,7 @@ const Login = () => {
     };
 
     try {
+      console.log(isProduction);
       console.log(urlLogin);
       const response = await fetch(urlLogin, {
         method: "POST",
@@ -120,7 +121,7 @@ const Login = () => {
     if (token && !usuario) {
       setLoading(true); // Activar loader durante verificación
       if (location.pathname.includes("verify")) {
-        fetch(`http://localhost:3001/api/auth/verify/${id}/${token}`)
+        fetch(`${API_URL}auth/verify/${id}/${token}`)
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
