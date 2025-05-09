@@ -1,0 +1,97 @@
+.bg-lecciones {
+  background: url("/public/main_image.png") center/cover no-repeat;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.panel-niveles {
+  background-color: #23190f;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  height: fit-content;
+  max-width: 800px;
+}
+
+.panel-titulo {
+  color: white;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.panel-control {
+  margin-bottom: 1.5rem;
+}
+
+.panel-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+  color: white;
+}
+
+.panel-select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.panel-select:focus {
+  outline: none;
+}
+
+.panel-detalles-ejercicio {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.panel-detalles-ejercicio h3 {
+  color: #23190f;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.panel-fen {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background-color: #b9a087;
+  border-radius: 5px;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.panel-boton-empezar,
+.panel-boton-leer {
+  background-color: #23190f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.panel-boton-empezar:hover,
+.panel-boton-leer:hover {
+  background-color: #2f358d;
+}
+
+.panel-sin-ejercicios {
+  text-align: center;
+  padding: 1.5rem;
+  color: #7f8c8d;
+}

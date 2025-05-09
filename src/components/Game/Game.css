@@ -1,0 +1,17 @@
+.game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  min-height: 70vh;
+  background: url("/public/main_image.png") center/cover no-repeat;
+  padding: 3rem;
+}
+
+@media (max-width: 1100px) {
+  .game-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+}

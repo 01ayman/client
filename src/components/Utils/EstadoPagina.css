@@ -1,0 +1,52 @@
+/* EstadoPagina.css */
+.estado-pagina-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("/public/main_image.png") center/cover no-repeat;
+  padding: 2rem;
+}
+
+.estado-pagina-contenido {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.estado-pagina-icono {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.estado-pagina-titulo {
+  color: #23190f;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.estado-pagina-mensaje {
+  color: #23190f;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.estado-pagina-boton {
+  background-color: #23190f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.estado-pagina-boton:hover {
+  background-color: #3c368d;
+}

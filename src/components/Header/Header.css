@@ -1,0 +1,59 @@
+header {
+    background-color: #23190f;
+    color: #fff;
+    padding: 5px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Irish Grover', cursive;
+}
+
+header a{
+    color: #fff;
+    text-decoration: none;
+}
+
+header img{
+    max-width: 120px;
+}
+
+header div:nth-child(2){
+    min-width: 50%;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    font-size: 1.3rem;
+}
+header div:nth-child(2) a{
+    position: relative;
+}
+header div:nth-child(2) a::after{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.1s ease-out;
+}
+header div:nth-child(2) a:hover::after{
+    width: 100%;
+}
+header button{
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    color: black;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.header-avatar{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}

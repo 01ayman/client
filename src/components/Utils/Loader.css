@@ -1,0 +1,44 @@
+/* Loader.css */
+.loader {
+  display: inline-block;
+  position: relative;
+}
+
+.loader-spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 2px solid #3498db;
+  animation: spin 1s linear infinite;
+}
+
+/* Sizes */
+.loader.small .loader-spinner {
+  width: 16px;
+  height: 16px;
+}
+
+.loader.medium .loader-spinner {
+  width: 24px;
+  height: 24px;
+}
+
+.loader.large .loader-spinner {
+  width: 40px;
+  height: 40px;
+}
+
+/* Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button loader specific styles */
+.registro-btn .loader-spinner {
+  border-top-color: white; /* Match button text color */
+  margin: 0 auto;
+}

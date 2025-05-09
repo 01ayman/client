@@ -1,0 +1,157 @@
+.ejercicio-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: white;
+  background: url("/public/main_image.png") center/cover no-repeat;
+}
+
+.opacity-container {
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15); /* Fondo blanco con transparencia */
+  backdrop-filter: blur(10px); /* Efecto de desenfoque del fondo */
+  -webkit-backdrop-filter: blur(10px); /* Soporte para Safari */
+  border-radius: 12px; /* Bordes redondeados */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Borde sutil */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* Sombra suave */
+  padding: 20px; /* Espaciado interno */
+  color: white; /* Color de texto */
+}
+
+.ejercicio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.ejercicio-header h2 {
+  color: white;
+  margin: 0;
+}
+
+.volver-btn {
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.volver-btn:hover {
+  background-color: #856404;
+}
+
+.ejercicio-content {
+  display: flex;
+  gap: 2rem;
+}
+
+.chessboard-container {
+  flex: 1;
+  max-width: 600px;
+}
+
+.ejercicio-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ejercicio-descripcion h3,
+.ejercicio-fen h3,
+.movimientos-realizados h3 {
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.ejercicio-fen code {
+  display: block;
+  background-color: #9b8952ab;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.movimientos-realizados ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.movimientos-realizados li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.feedback {
+  padding: 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.feedback.correcto {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.feedback.incorrecto {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.ejercicio-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.control-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.reiniciar {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.reiniciar:hover {
+  background-color: #e2e6ea;
+}
+
+.solucion {
+  background-color: #ffeeba;
+  color: #856404;
+}
+
+.solucion:hover {
+  background-color: #ffe8a1;
+}
+
+.completado {
+  background-color: #d4edda;
+  color: #155724;
+  cursor: default;
+}
+
+@media (max-width: 768px) {
+  .ejercicio-content {
+    flex-direction: column;
+  }
+
+  .chessboard-container {
+    max-width: 100%;
+  }
+}
