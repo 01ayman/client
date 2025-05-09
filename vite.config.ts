@@ -14,6 +14,6 @@ export default defineConfig({
   // },
   base:
     process.env.VITE_ENVIRONMENT === "production"
-      ? "https://chesslearn.netlify.app"
+      ? "https://chesslearn.netlify.app/"
       : "/",
 });
