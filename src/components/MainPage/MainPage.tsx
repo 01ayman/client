@@ -9,7 +9,7 @@ const MainPage = () => {
     <div className="mainpage-container">
       <section className="mainpage-hero">
         <img
-          src="/public/rsz_logo_blanco.png"
+          src="/assets/rsz_logo_blanco.png"
           alt="ChessLearn Logo"
           className="mainpage-logo"
         />

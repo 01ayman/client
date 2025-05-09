@@ -3,7 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   color: white;
-  background: url("/public/main_image.png") center/cover no-repeat;
+  background: url("/assets/main_image.png") center/cover no-repeat;
 }
 
 .opacity-container {

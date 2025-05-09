@@ -1,6 +1,6 @@
 .login-bg {
     min-height: 100vh;
-    background: url('/public/main_image.png') center/cover no-repeat;
+    background: url('/assets/main_image.png') center/cover no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: center;

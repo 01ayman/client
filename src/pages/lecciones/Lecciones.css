@@ -1,5 +1,5 @@
 .bg-lecciones {
-  background: url("/public/main_image.png") center/cover no-repeat;
+  background: url("/assets/main_image.png") center/cover no-repeat;
   min-height: 100vh;
   padding: 2rem;
   display: flex;

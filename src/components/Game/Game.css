@@ -4,7 +4,7 @@
   align-items: center;
   gap: 48px;
   min-height: 70vh;
-  background: url("/public/main_image.png") center/cover no-repeat;
+  background: url("/assets/main_image.png") center/cover no-repeat;
   padding: 3rem;
 }
 

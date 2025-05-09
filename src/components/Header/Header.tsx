@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 export const Header = () => {
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
-  const logo = "/public/logo_blanco.png";
+  const logo = "/assets/logo_blanco.png";
   return (
     <header>
       <a
@@ -36,7 +36,7 @@ export const Header = () => {
       <div className="header-avatar">
         <a href="">
           <img
-            src={usuario?.avatar ? usuario.avatar : "/public/avatar.png"}
+            src={usuario?.avatar ? usuario.avatar : "/assets/avatar.png"}
             alt="Avatar"
             style={{ width: "40px", height: "40px", borderRadius: "50%" }}
           />

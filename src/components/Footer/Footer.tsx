@@ -18,7 +18,7 @@ const Footer = () => {
       <div className="footer-social">
         {/* Aquí puedes poner iconos de redes sociales si lo deseas */}
         <img
-          src="/public/logo_blanco.png"
+          src="/assets/logo_blanco.png"
           alt="ChessLearn Logo"
           className="footer-logo"
         />
