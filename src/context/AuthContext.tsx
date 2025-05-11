@@ -36,16 +36,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
     if (stored) {
       setToken(stored);
-      fetchUser(stored);
+      fetchUser();
     } else {
       setLoading(false);
     }
   }, []);
 
-  const fetchUser = async (jwtToken: string) => {
+  const fetchUser = async () => {
     try {
       const res = await fetch(API_URL + "usuarios/me", {
-        headers: { Authorization: `Bearer ${jwtToken}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error("Token inválido");
@@ -67,7 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (jwtToken: string) => {
     localStorage.setItem("jwtToken", jwtToken);
     setToken(jwtToken);
-    await fetchUser(jwtToken);
+    console.log(token);
+    await fetchUser();
   };
 
   const logout = () => {
