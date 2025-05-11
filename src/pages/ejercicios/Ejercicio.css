@@ -57,10 +57,13 @@
 }
 
 .ejercicio-info {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.chessboard-container {
+  min-width: 500px;
 }
 
 .ejercicio-descripcion h3,

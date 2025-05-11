@@ -201,7 +201,7 @@ const Perfil = () => {
           <div className="avatar-section">
             <div className="avatar-container">
               <img
-                src={avatarPreview || usuario?.avatar || "/assets/avatar.png"}
+                src={avatarPreview || usuario?.avatar || "https://res.cloudinary.com/dfiucj1to/image/upload/v1746995734/avatar_tuaroe.png"}
                 alt="Avatar"
                 className="profile-avatar"
               />

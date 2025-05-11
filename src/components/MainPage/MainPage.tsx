@@ -8,7 +8,7 @@ const MainPage = () => {
     <div className="mainpage-container">
       <section className="mainpage-hero">
         <img
-          src="/assets/rsz_logo_blanco.png"
+          src="https://res.cloudinary.com/dfiucj1to/image/upload/v1746995734/rsz_logo_blanco_fu7ygn.png"
           alt="ChessLearn Logo"
           className="mainpage-logo"
         />

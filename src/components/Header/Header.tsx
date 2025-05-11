@@ -8,7 +8,7 @@ export const Header = () => {
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const logo = "/assets/logo_blanco.png";
+  const logo = "https://res.cloudinary.com/dfiucj1to/image/upload/v1746995734/logo_blanco_tb7len.png";
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -47,7 +47,7 @@ export const Header = () => {
       <div className="header-avatar">
         <a href="" onClick={() => navigate("/perfil")}>
           <img
-            src={usuario?.avatar ? usuario.avatar : "/assets/avatar.png"}
+            src={usuario?.avatar ? usuario.avatar : "https://res.cloudinary.com/dfiucj1to/image/upload/v1746995734/avatar_tuaroe.png"}
             alt="Avatar"
             className="avatar-image"
           />
