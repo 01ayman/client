@@ -1,103 +1,146 @@
 @keyframes reveal {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .mainpage-container {
-    background: #0A0A0A;
-    color: #fff;
-    min-height: 100vh;
-    font-family: 'Irish Grover', cursive;
+  background: #0a0a0a;
+  color: #fff;
+  min-height: 100vh;
+  font-family: "Irish Grover", cursive;
 }
 
 .mainpage-hero {
-    position: relative;
-    min-height: 90vh;
-    text-align: center;
-    padding: 40px 20px 60px 20px;
-    overflow: hidden;
+  position: relative;
+  min-height: 90vh;
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .mainpage-hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('/assets/main_image.png') center/cover no-repeat;
-    opacity: 0.3; 
-    z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/assets/main_image.png") center/cover no-repeat;
+  opacity: 0.3;
+  z-index: 0;
 }
 
 .mainpage-hero > * {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .mainpage-logo {
-    max-width: 200px;
-    margin-bottom: 20px;
-    transition: 1s
+  max-width: 150px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
 }
+
 .mainpage-logo:hover {
-    max-width: 250px;
+  transform: scale(1.1);
 }
 
 .mainpage-subtitle {
-    font-family: "Irish Grover";
-    font-size: 1.7rem;
-    margin: 30px 0 10px 0;
-    letter-spacing: 3px;
+  font-family: "Irish Grover";
+  font-size: 1.2rem;
+  margin: 20px 0;
+  letter-spacing: 2px;
 }
 
 .mainpage-btn {
-    background: #23190f;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 35px;
-    font-size: 1.1rem;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-family: inherit;
-    letter-spacing: 1px;
+  background: #23190f;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  letter-spacing: 1px;
+  min-width: 150px;
 }
 
-
-
 .mainpage-btn-primary {
-    background: #000;
-    font-size: 1.2rem;
-    margin-top: 15px;
+  background: #000;
+  font-size: 1.1rem;
+  padding: 12px 30px;
 }
 
 .mainpage-btn:hover {
-    background: #140d7a;
-    /* color: black; */
+  background: #140d7a;
+  transform: translateY(-2px);
 }
 
 .mainpage-section {
-    text-align: center;
-    padding: 40px 0;
-    view-timeline-name: --revealing-image;
-	view-timeline-axis: block;
-	animation: linear reveal both;
-	animation-timeline: --revealing-image;
-	animation-range: entry 25% cover 50%;
+  text-align: center;
+  padding: 30px 20px;
+  view-timeline-name: --revealing-image;
+  view-timeline-axis: block;
+  animation: linear reveal both;
+  animation-timeline: --revealing-image;
+  animation-range: entry 25% cover 50%;
 }
 
 .mainpage-section h2 {
-    font-family: "Irish Grover";
-    font-size: 4rem;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-    line-height: 1.2;
+  font-family: "Irish Grover";
+  font-size: 2rem;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  line-height: 1.3;
 }
 
+/* Media Queries */
+@media (min-width: 480px) {
+  .mainpage-hero {
+    padding: 40px 20px 60px;
+  }
+
+  .mainpage-logo {
+    max-width: 200px;
+    margin-bottom: 20px;
+  }
+
+  .mainpage-subtitle {
+    font-size: 1.5rem;
+    margin: 30px 0;
+  }
+
+  .mainpage-btn {
+    padding: 10px 35px;
+    font-size: 1.1rem;
+  }
+
+  .mainpage-btn-primary {
+    font-size: 1.2rem;
+  }
+
+  .mainpage-section h2 {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .mainpage-section h2 {
+    font-size: 4rem;
+  }
+
+  .mainpage-subtitle {
+    font-size: 1.7rem;
+    letter-spacing: 3px;
+  }
+}

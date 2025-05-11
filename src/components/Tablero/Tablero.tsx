@@ -24,7 +24,8 @@ export default function Tablero({
     [square: string]: React.CSSProperties;
   }>({});
   const [isInvalidMove, setIsInvalidMove] = useState(false);
-  const boardRef = useRef(null);
+  const [boardSize, setBoardSize] = useState(500);
+  const boardRef = useRef<HTMLDivElement>(null);
 
   const isPlayerTurn = game.turn() === playerColor && !waitingForAI;
 
@@ -35,12 +36,25 @@ export default function Tablero({
     }
   }, [isInvalidMove]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (boardRef.current) {
+        const containerWidth = boardRef.current.offsetWidth;
+        const newSize = Math.min(containerWidth, 500);
+        setBoardSize(newSize);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   function onDrop(
     sourceSquare: string,
     targetSquare: string,
     piece: string
   ): boolean {
-    console.log(isPlayerTurn);
     if (!isPlayerTurn) return false;
 
     const promotion = shouldPromote(piece, targetSquare) ? "q" : undefined;
@@ -53,13 +67,12 @@ export default function Tablero({
       .then((move: any) => {
         if (!move) {
           setIsInvalidMove(true);
-          console.log("Movimiento inválido");
         }
         game.move(move);
       })
       .catch((error: any) => {
         setIsInvalidMove(true);
-        console.log("Move error:", error);
+        console.error("Move error:", error);
       });
     return true;
   }
@@ -85,7 +98,7 @@ export default function Tablero({
     const highlights: { [square: string]: React.CSSProperties } = {};
     moves.forEach((move) => {
       highlights[move.to] = {
-        background: "radial-gradient(circle, #2f9b2b66 20%, transparent 25%)",
+        background: "radial-gradient(circle, #2f9b2b66 36%, transparent 40%)",
         borderRadius: "50%",
       };
     });
@@ -98,16 +111,15 @@ export default function Tablero({
   const boardOrientation = playerColor === "w" ? "white" : "black";
 
   return (
-    <div className="chess-container">
+    <div className="chess-container" ref={boardRef}>
       <div
         className={`chessboard-wrapper ${isInvalidMove ? "invalid-move" : ""}`}
       >
         <Chessboard
-          ref={boardRef}
           position={game.fen()}
           onPieceDrop={onDrop}
           onPieceClick={onPieceClick}
-          boardWidth={500}
+          boardWidth={boardSize}
           customSquareStyles={highlightSquares}
           customBoardStyle={{
             borderRadius: "4px",
@@ -118,6 +130,7 @@ export default function Tablero({
           areArrowsAllowed={true}
           animationDuration={200}
           boardOrientation={boardOrientation}
+          id="responsive-chessboard"
         />
       </div>
     </div>

@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import "./MainPage.css";
 import { useAuth } from "../../context/AuthContext";
-// const rutaLogin = '/login'
+
 const MainPage = () => {
   const navigate = useNavigate();
   const { usuario } = useAuth();
+
+  const handleNavigation = (path: string) => {
+    navigate(usuario ? path : "/login");
+  };
+
   return (
     <div className="mainpage-container">
       <section className="mainpage-hero">
@@ -12,13 +17,12 @@ const MainPage = () => {
           src="/assets/rsz_logo_blanco.png"
           alt="ChessLearn Logo"
           className="mainpage-logo"
+          loading="lazy"
         />
         <p className="mainpage-subtitle">Aprende. Juega. Mejora.</p>
         <button
           className="mainpage-btn mainpage-btn-primary"
-          onClick={() => {
-            navigate(usuario ? "/jugar" : "/login");
-          }}
+          onClick={() => handleNavigation("/jugar")}
         >
           Comienza ya
         </button>
@@ -32,9 +36,7 @@ const MainPage = () => {
         </h2>
         <button
           className="mainpage-btn"
-          onClick={() => {
-            navigate("/login");
-          }}
+          onClick={() => handleNavigation("/jugar")}
         >
           Jugar
         </button>
@@ -48,9 +50,7 @@ const MainPage = () => {
         </h2>
         <button
           className="mainpage-btn"
-          onClick={() => {
-            navigate("/login");
-          }}
+          onClick={() => handleNavigation("/lecciones")}
         >
           Aprender
         </button>
@@ -63,9 +63,7 @@ const MainPage = () => {
         </h2>
         <button
           className="mainpage-btn"
-          onClick={() => {
-            navigate("/login");
-          }}
+          onClick={() => handleNavigation("/ranking")}
         >
           Ver ranking
         </button>
@@ -73,4 +71,5 @@ const MainPage = () => {
     </div>
   );
 };
+
 export default MainPage;

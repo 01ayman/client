@@ -125,12 +125,13 @@ export default function Lecciones() {
             <option value="">Selecciona una lección</option>
             {leccionesFiltradas.map((leccion: any) => {
               const progreso = progresoPorLeccion[leccion.id];
-              const completados = progreso?.completados ?? 0;
+              // const completados = progreso?.completados ?? 0;
               const total = progreso?.total ?? leccion.ejercicios.length;
               return (
                 <option key={leccion.id} value={leccion.id}>
-                  {leccion.titulo} ( {completados} ejercicios de {total}{" "}
-                  completados)
+                  {leccion.titulo} - {total} ejercicio/s
+                  {/* ( {completados} ejercicios de {total}{" "}
+                  completados) */}
                 </option>
               );
             })}

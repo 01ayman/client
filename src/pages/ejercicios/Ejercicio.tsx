@@ -52,7 +52,7 @@ export default function Ejercicio() {
         setMovimientosRealizados((prev) => [...prev, move.san]);
         setFeedback("¡Correcto! Has encontrado la solución.");
         setEjercicioCompletado(true);
-        actualizarProgreso();
+        // actualizarProgreso();
         return true;
       }
     } else {
@@ -64,16 +64,16 @@ export default function Ejercicio() {
     return false;
   };
 
-  const actualizarProgreso = async () => {
-    if (!usuario || !ejercicio) return;
+  // const actualizarProgreso = async () => {
+  //   if (!usuario || !ejercicio) return;
 
-    try {
-      await updateLessonProgress(usuario.id!, ejercicio.id);
-    } catch (error) {
-      console.error("Error al actualizar progreso:", error);
-      setFeedback((prev) => prev + " (No se pudo guardar el progreso)");
-    }
-  };
+  //   try {
+  //     await updateLessonProgress(usuario.id!, ejercicio.id);
+  //   } catch (error) {
+  //     console.error("Error al actualizar progreso:", error);
+  //     setFeedback((prev) => prev + " (No se pudo guardar el progreso)");
+  //   }
+  // };
 
   const resetExercise = () => {
     if (!ejercicio) return;

@@ -1,248 +1,273 @@
-import React, { useEffect, useState } from "react";
-import "./Login.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import "./Profile.css";
 import { Message } from "../../components/Utils/Message";
 import ChessError from "../../components/Utils/Error";
-import { useAuth } from "../../context/AuthContext";
-import { Loader } from "../../components/Utils/Loader"; // Importa el componente Loader
-import { API_URL, isProduction } from "../../constants/GlobalConstants";
 
-const urlLogin = API_URL + "auth/login";
-const urlEmail = API_URL + "auth/enviar-correo-verificacion";
+const Perfil = () => {
+  const { user, updateProfile, updateEmail, updatePassword, loading } =
+    useAuth();
 
-const Login = () => {
-  const { id, token } = useParams();
-  const [user, setUser] = useState(
-    () => localStorage.getItem("login_user") || ""
-  );
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  const [editMode, setEditMode] = useState({
+    name: false,
+    email: false,
+    password: false,
+  });
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [avatarPreview, setAvatarPreview] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [verifyMessage, setVerifyMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isVerified, setIsVerified] = useState(true);
-  const [loading, setLoading] = useState(false); // Estado para el loader
-  const { usuario, login } = useAuth();
-  const navigate = useNavigate();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    localStorage.setItem("login_user", user);
+    if (user) {
+      setFormData({
+        name: user.nombre,
+        email: user.correo,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setAvatarPreview(user.avatar || "/assets/avatar.png");
+    }
   }, [user]);
 
-  const sendVerificationEmail = async () => {
-    setError("");
-    setVerifyMessage("");
-    setLoading(true); // Activar loader
-    try {
-      const response = await fetch(urlEmail, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ correo: user, contrasena: password }),
-      });
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        setError(data.error || "Error en el login");
-        return;
-      }
-      if (data.code !== 200) {
-        setError(data.message);
-        return;
-      }
-      setVerifyMessage(data.message);
-    } catch (err) {
-      setError("Error de conexión con el servidor");
-    } finally {
-      setLoading(false); // Desactivar loader
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setVerifyMessage("");
-    setLoading(true); // Activar loader
-    console.log(API_URL);
-    console.log(isProduction);
-    if (!user || !password) {
-      alert("Por favor, completa todos los campos.");
-      setLoading(false);
-      return;
-    }
+  const toggleEditMode = (field: keyof typeof editMode) => {
+    setEditMode((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
 
-    const userLogin = {
-      correo: user,
-      contrasena: password,
-    };
+  const handleSubmit = async (field: keyof typeof editMode) => {
+    setError("");
+    setMessage("");
 
     try {
-      const response = await fetch(urlLogin, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userLogin),
-      });
-
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        setError(data.error || "Error en el login");
-        return;
+      if (field === "name" && editMode.name) {
+        await updateProfile({ nombre: formData.name });
+        setMessage("Nombre actualizado correctamente");
       }
 
-      if (data.code && data.code !== 200) {
-        setError(data.message);
-        if (data.code === 403) {
-          setIsVerified(false);
-          return;
+      if (field === "email" && editMode.email) {
+        await updateEmail(formData.currentPassword, formData.email);
+        setMessage("Correo actualizado correctamente");
+      }
+
+      if (field === "password" && editMode.password) {
+        if (formData.newPassword !== formData.confirmPassword) {
+          throw new Error("Las contraseñas no coinciden");
         }
-        return;
+        await updatePassword(formData.currentPassword, formData.newPassword);
+        setMessage("Contraseña actualizada correctamente");
+        setFormData((prev) => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
       }
 
-      if (remember) {
-        localStorage.setItem("jwtToken", data.token);
-      } else {
-        sessionStorage.setItem("jwtToken", data.token);
+      if (avatarFile) {
+        await updateProfile({ avatar: avatarFile });
+        setMessage((msg) => msg + " Avatar actualizado correctamente.");
+        setAvatarFile(null);
       }
-      login(data.token);
-      navigate("/");
+
+      toggleEditMode(field);
     } catch (err) {
-      setError("Error de conexión con el servidor");
-    } finally {
-      setLoading(false); // Desactivar loader
+      setError(
+        err instanceof Error ? err.message : "Error al actualizar el perfil"
+      );
     }
   };
 
-  useEffect(() => {
-    if (token && !usuario) {
-      setLoading(true); // Activar loader durante verificación
-      if (location.pathname.includes("verify")) {
-        fetch(`${API_URL}auth/verify/${id}/${token}`)
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            if (data === true) {
-              setVerifyMessage(
-                "¡Cuenta verificada correctamente! Ya puedes iniciar sesión."
-              );
-            } else {
-              setError(
-                "El enlace de verificación no es válido o ya fue usado."
-              );
-            }
-          })
-          .catch(() => setError("Error al verificar el token."))
-          .finally(() => setLoading(false)); // Desactivar loader
-      }
-    }
-  }, [token]);
+  const triggerFileInput = () => fileInputRef.current?.click();
 
   return (
-    <div className="login-bg">
-      <form onSubmit={handleSubmit} className="login-form-container">
-        <h2 className="login-title">INICIAR SESIÓN</h2>
-        <input
-          type="email"
-          placeholder="correo"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          className="login-input"
-          required
-          disabled={loading}
-        />
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="login-input"
-          required
-          disabled={loading}
-        />
-        <button
-          type="button"
-          style={{
-            border: "none",
-            width: "fit-content",
-            textAlign: "center",
-            color: "white",
-            fontSize: "1rem",
-            marginBottom: "1rem",
-            alignSelf: "center",
-            borderRadius: "10px",
-            backgroundColor: "black",
-            padding: "0.4rem",
-            cursor: "pointer",
-          }}
-          onClick={() => setShowPassword(!showPassword)}
-          disabled={loading}
-        >
-          {showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-        </button>
-        <div className="login-options">
-          <label className="login-checkbox-label">
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
-              style={{ accentColor: "#fff" }}
-              disabled={loading}
-            />
-            Recordarme
-          </label>
-          <a
-            href="#"
-            style={{
-              color: "#fff",
-              textDecoration: "underline",
-              fontSize: "1rem",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              !loading && navigate("/cambiar-contrasena");
-            }}
-          >
-            ¿Contraseña olvidada?
-          </a>
-        </div>
-        <button type="submit" className="login-btn" disabled={loading}>
-          {loading ? <Loader size="small" /> : "Iniciar sesión"}
-        </button>
-        <div className="login-register">
-          ¿No tienes una cuenta?{" "}
-          <a
-            href="#"
-            style={{
-              color: "#fff",
-              textDecoration: "underline",
-              fontWeight: "bold",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              !loading && navigate("/registro");
-            }}
-          >
-            Regístrate
-          </a>
-        </div>
-        {verifyMessage && <Message message={verifyMessage} />}
-        {error && <ChessError label={error} />}
-        {!isVerified && (
-          <button
-            type="button"
-            className="verify-btn"
-            onClick={sendVerificationEmail}
-            disabled={loading}
-          >
-            {loading ? <Loader size="small" /> : "Volver a verificar"}
+    <div className="profile-container">
+      <h1 className="profile-title">Mi Perfil</h1>
+
+      {message && <Message message={message} />}
+      {error && <ChessError label={error} />}
+
+      <div className="profile-section">
+        <div className="avatar-container">
+          <img src={avatarPreview} alt="Avatar" className="profile-avatar" />
+          <button onClick={triggerFileInput} disabled={loading}>
+            Cambiar
           </button>
-        )}
-      </form>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleAvatarChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+        </div>
+
+        <div className="profile-info">
+          {/* Nombre */}
+          <div className="profile-field">
+            <label>Nombre de usuario</label>
+            {editMode.name ? (
+              <div className="edit-field">
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                />
+                <button onClick={() => handleSubmit("name")} disabled={loading}>
+                  {loading ? "Guardando..." : "Guardar"}
+                </button>
+                <button
+                  onClick={() => toggleEditMode("name")}
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <div className="view-field">
+                <span>{formData.name}</span>
+                <button onClick={() => toggleEditMode("name")}>Editar</button>
+              </div>
+            )}
+          </div>
+
+          {/* Email */}
+          <div className="profile-field">
+            <label>Correo electrónico</label>
+            {editMode.email ? (
+              <div className="edit-field">
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                />
+                <input
+                  type="password"
+                  name="currentPassword"
+                  placeholder="Contraseña actual"
+                  value={formData.currentPassword}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                />
+                <button
+                  onClick={() => handleSubmit("email")}
+                  disabled={loading}
+                >
+                  {loading ? "Guardando..." : "Guardar"}
+                </button>
+                <button
+                  onClick={() => toggleEditMode("email")}
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <div className="view-field">
+                <span>{formData.email}</span>
+                <button onClick={() => toggleEditMode("email")}>Editar</button>
+              </div>
+            )}
+          </div>
+
+          {/* Contraseña */}
+          <div className="profile-field">
+            <label>Contraseña</label>
+            {editMode.password ? (
+              <div className="edit-password">
+                <input
+                  type="password"
+                  name="currentPassword"
+                  placeholder="Contraseña actual"
+                  value={formData.currentPassword}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                />
+                <input
+                  type="password"
+                  name="newPassword"
+                  placeholder="Nueva contraseña"
+                  value={formData.newPassword}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                />
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirmar nueva contraseña"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  disabled={loading}
+                />
+                <div className="password-actions">
+                  <button
+                    onClick={() => handleSubmit("password")}
+                    disabled={loading}
+                  >
+                    {loading ? "Guardando..." : "Guardar"}
+                  </button>
+                  <button
+                    onClick={() => toggleEditMode("password")}
+                    disabled={loading}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="view-field">
+                <span>••••••••</span>
+                <button onClick={() => toggleEditMode("password")}>
+                  Cambiar
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Estadísticas */}
+      <div className="profile-stats">
+        <h2>Estadísticas</h2>
+        <div className="stats-grid">
+          <div className="stat-item">
+            <span className="stat-value">{user?.elo ?? 1200}</span>
+            <span className="stat-label">ELO</span>
+          </div>
+          {/* Puedes añadir más estadísticas si las traes desde getUserStats() */}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default Perfil;
