@@ -141,7 +141,7 @@ export function streamGame(gameId: string, handlers: GameHandlers): () => void {
 }
 
 export async function terminarPartida(gameId: string): Promise<boolean> {
-  const res = await fetch(`${import.meta.env.API_URL}lichess/resign/${gameId}`);
+  const res = await fetch(`${API_URL}lichess/resign/${gameId}`);
   const data = res.ok;
   return data;
 }

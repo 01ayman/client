@@ -5,6 +5,7 @@ import { Message } from "../../components/Utils/Message";
 import ChessError from "../../components/Utils/Error";
 import { useAuth } from "../../context/AuthContext";
 import { Loader } from "../../components/Utils/Loader";
+import { API_URL } from "../../constants/GlobalConstants";
 
 const Registro = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Registro = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const { usuario } = useAuth();
 
   useEffect(() => {
@@ -35,17 +36,17 @@ const Registro = () => {
     localStorage.setItem("registro_email", email);
   }, [email]);
 
-  const url = "http://192.168.126.1:3001/api/auth/register";
+  const url = API_URL + "auth/register";
 
   const registrar = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
     setError("");
-    setLoading(true); 
+    setLoading(true);
 
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden");
-      setLoading(false); 
+      setLoading(false);
       return;
     }
 
@@ -78,7 +79,7 @@ const Registro = () => {
         return;
       } else {
         setMessage(data.message);
-        
+
         setTimeout(() => {
           navigate("/login");
         }, 1500);
@@ -86,7 +87,7 @@ const Registro = () => {
     } catch (err) {
       setError("Error de conexión con el servidor");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -101,7 +102,7 @@ const Registro = () => {
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           required
-          disabled={loading} 
+          disabled={loading}
         />
         <input
           type="email"
@@ -130,11 +131,7 @@ const Registro = () => {
           required
           disabled={loading}
         />
-        <button
-          type="submit"
-          className="registro-btn"
-          disabled={loading} 
-        >
+        <button type="submit" className="registro-btn" disabled={loading}>
           {loading ? <Loader size="small" /> : "Registrarse"}
         </button>
         <div className="registro-register">
