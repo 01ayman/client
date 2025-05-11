@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Chess } from "chess.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { updateLessonProgress } from "../../services/leccionesService";
 import Tablero from "../../components/Tablero/Tablero";
 import "./Ejercicio.css";
 

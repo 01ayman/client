@@ -60,6 +60,7 @@ const Game = () => {
 
   const handleTimeOut = (color: "w" | "b") => {
     stopTimer();
+    console.log(color);
   };
 
   const formatTime = (ms: number) => {
@@ -117,7 +118,7 @@ const Game = () => {
         }
       },
       onError: (error: any) => {
-         console.error("Error de conexión:", error);
+        console.error("Error de conexión:", error);
         stopTimer();
       },
       onEnd: (reason) => {

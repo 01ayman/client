@@ -72,6 +72,7 @@ export default function Tablero({
       })
       .catch((error: any) => {
         setIsInvalidMove(true);
+        console.error(error);
       });
     return true;
   }

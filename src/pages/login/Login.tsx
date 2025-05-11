@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Message } from "../../components/Utils/Message";
 import ChessError from "../../components/Utils/Error";
 import { useAuth } from "../../context/AuthContext";
-import { Loader } from "../../components/Utils/Loader"; 
-import { API_URL, isProduction } from "../../constants/GlobalConstants";
+import { Loader } from "../../components/Utils/Loader";
+import { API_URL } from "../../constants/GlobalConstants";
 
 const urlLogin = API_URL + "auth/login";
 const urlEmail = API_URL + "auth/enviar-correo-verificacion";
@@ -32,7 +32,7 @@ const Login = () => {
   const sendVerificationEmail = async () => {
     setError("");
     setVerifyMessage("");
-    setLoading(true); 
+    setLoading(true);
     try {
       const response = await fetch(urlEmail, {
         method: "POST",
@@ -55,7 +55,7 @@ const Login = () => {
     } catch (err) {
       setError("Error de conexión con el servidor");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -63,7 +63,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setVerifyMessage("");
-    setLoading(true); 
+    setLoading(true);
     // console.log(API_URL);
     // console.log(isProduction);
     if (!user || !password) {
@@ -112,13 +112,13 @@ const Login = () => {
     } catch (err) {
       setError("Error de conexión con el servidor");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (token && !usuario) {
-      setLoading(true); 
+      setLoading(true);
       if (location.pathname.includes("verify")) {
         fetch(`${API_URL}auth/verify/${id}/${token}`)
           .then((res) => res.json())
@@ -135,7 +135,7 @@ const Login = () => {
             }
           })
           .catch(() => setError("Error al verificar el token."))
-          .finally(() => setLoading(false)); 
+          .finally(() => setLoading(false));
       }
     }
   }, [token]);
