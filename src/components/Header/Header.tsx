@@ -29,12 +29,9 @@ export const Header = () => {
         <a href="#" onClick={() => navigate("/jugar")}>
           Ranking
         </a>
-        <a href="#" onClick={() => navigate("/jugar")}>
-          Informes
-        </a>
       </div>
       <div className="header-avatar">
-        <a href="">
+        <a href="" onClick={() => navigate("/perfil")}>
           <img
             src={usuario?.avatar ? usuario.avatar : "/assets/avatar.png"}
             alt="Avatar"

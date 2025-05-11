@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../constants/GlobalConstants";
+import { updateEmail, updateName } from "../services/userService";
 
 type Usuario = {
   id: number;
@@ -17,6 +18,7 @@ type AuthContextType = {
   login: (token: string) => void;
   logout: () => void;
   loading: boolean;
+  updateUser: any;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -76,8 +78,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     navigate("/login");
   };
 
+  const updateUser = async (
+    tipo: string,
+    valorUno: any,
+    valorDos: any = ""
+  ) => {
+    setLoading(true);
+    let data: any;
+    switch (tipo) {
+      case "nombre":
+        data = await updateName(valorUno);
+        if (data.user) {
+          setUsuario((prev) => ({
+            ...prev,
+            nombre: data.user.nombre,
+          }));
+        }
+        break;
+      case "correo":
+        data = await updateEmail(valorUno, valorDos);
+        if (data.user) {
+          setUsuario((prev) => ({
+            ...prev,
+            correo: data.user.correo,
+          }));
+        }
+        break;
+    }
+    setLoading(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ usuario, token, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ usuario, token, login, logout, loading, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

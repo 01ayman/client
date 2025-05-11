@@ -13,6 +13,7 @@ import CambiarContrasena from "./pages/recordarContrasena/CambiarContrasena";
 import Lecciones from "./pages/lecciones/Lecciones";
 import Ejercicio from "./pages/ejercicios/Ejercicio";
 import EstadoPagina from "./components/Utils/EstadoPagina";
+import Perfil from "./pages/perfil/Perfil";
 
 function App() {
   return (
@@ -83,6 +84,14 @@ function App() {
                 element={
                   <ProtectedRoute logged={true}>
                     <Ejercicio />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path="/perfil"
+                element={
+                  <ProtectedRoute logged={true}>
+                    <Perfil />
                   </ProtectedRoute>
                 }
               ></Route>
