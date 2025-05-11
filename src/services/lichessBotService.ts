@@ -1,12 +1,11 @@
 import { API_URL } from "../constants/GlobalConstants";
 
-// src/services/lichessService.ts
 interface GameSettings {
-  level?: number; // 1-8
+  level?: number;
   color?: "white" | "black" | "random";
   clock?: {
-    limit: number; // segundos
-    increment?: number; // segundos
+    limit: number;
+    increment?: number;
   };
   variant?: "standard" | "chess960";
 }
@@ -14,7 +13,7 @@ interface GameSettings {
 interface GameHandlers {
   onMessage: (event: GameEvent) => void;
   onError?: (error: Error | Event) => void;
-  onEnd?: (reason: GameEndReason) => void; // Usamos string literal type
+  onEnd?: (reason: GameEndReason) => void;
 }
 
 type GameEndReason =
@@ -101,11 +100,11 @@ export async function makeMove(
       );
     }
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
 
     return data;
   } catch (error) {
-    console.log("Error en makeMove:", error);
+    // console.log("Error en makeMove:", error);
     return { ok: false };
   }
 }
@@ -117,15 +116,15 @@ export function streamGame(gameId: string, handlers: GameHandlers): () => void {
   eventSource.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data);
-      console.log(data);
+      // console.log(data);
       handlers.onMessage(data);
     } catch (error) {
-      console.log("Error parsing SSE message:", error);
+      // console.log("Error parsing SSE message:", error);
     }
   };
 
   eventSource.onerror = (err) => {
-    console.log("SSE connection error:", err);
+    // console.log("SSE connection error:", err);
     const reason: GameEndReason =
       eventSource.readyState === EventSource.CLOSED ? "timeout" : "unknown";
 
@@ -133,62 +132,12 @@ export function streamGame(gameId: string, handlers: GameHandlers): () => void {
     handlers.onError?.(err);
 
     eventSource.close();
-    eventSource.close(); // optional: auto-close on error
+    eventSource.close();
   };
 
-  // Cleanup function
   return () => {
     eventSource.close();
   };
-  // const controller = new AbortController();
-  // const signal = controller.signal;
-
-  // const streamUrl = `${API_URL}lichess/stream/${gameId}`;
-
-  // fetch(streamUrl, {
-  //   method: "GET",
-  //   headers: {
-  //     Authorization: `Bearer ${import.meta.env.VITE_LICHESS_TOKEN}`,
-  //     Accept: "text/event-stream",
-  //   },
-  //   signal,
-  // })
-  //   .then(async (res) => {
-  //     const reader = res.body?.getReader();
-  //     const decoder = new TextDecoder("utf-8");
-
-  //     let buffer = "";
-
-  //     while (true) {
-  //       const { done, value } = await reader!.read();
-  //       if (done) break;
-
-  //       buffer += decoder.decode(value, { stream: true });
-
-  //       const parts = buffer.split("\n\n");
-
-  //       for (const part of parts.slice(0, -1)) {
-  //         const lines = part.split("\n").filter((l) => l.startsWith("data: "));
-  //         const data = lines.map((l) => l.replace(/^data:\s*/, "")).join("");
-  //         if (data) {
-  //           try {
-  //             const parsed = JSON.parse(data);
-  //             console.log(parsed);
-  //             setMessages((prev) => [...prev, parsed]);
-  //           } catch (err) {
-  //             console.error("❌ JSON malformado:", data);
-  //           }
-  //         }
-  //       }
-
-  //       buffer = parts[parts.length - 1]; // mantiene lo que no terminó en \n\n
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.error("❌ Error en stream SSE:", err);
-  //   });
-
-  // return () => controller.abort(); // limpieza al desmontar
 }
 
 export async function terminarPartida(gameId: string): Promise<boolean> {

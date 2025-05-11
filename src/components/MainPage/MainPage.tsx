@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./MainPage.css";
 import { useAuth } from "../../context/AuthContext";
-// const rutaLogin = '/login'
 const MainPage = () => {
   const navigate = useNavigate();
   const { usuario } = useAuth();

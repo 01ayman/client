@@ -13,11 +13,9 @@ const ProtectedRoute = ({
   const { usuario, loading } = useAuth();
   const navigate = useNavigate();
 
-  console.log(usuario);
 
   useEffect(() => {
     if (!loading && logged && !usuario) {
-      console.log("inicia sesión");
       navigate("/login");
     } else if (!logged && usuario) {
       navigate("/");

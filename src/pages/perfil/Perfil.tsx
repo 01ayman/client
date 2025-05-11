@@ -102,7 +102,7 @@ const Perfil = () => {
     setIsSubmitting(true);
     try {
       const result = await updateUser("correo", currentPassword, newEmail);
-      if (result.success) {
+      if (result.ok) {
         setSuccessMessage(
           "Correo actualizado. Por favor verifica tu nuevo correo."
         );

@@ -1,41 +1,55 @@
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 export const Header = () => {
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const logo = "/assets/logo_blanco.png";
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsMenuOpen(false);
+  };
+
   return (
     <header>
-      <a
-        onClick={() => {
-          navigate("/");
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        <img src={logo} alt="" />
-      </a>
-      <div>
-        <a href="#" onClick={() => navigate("/jugar")}>
+      <div className="header-logo">
+        <a onClick={() => handleNavigation("/")} style={{ cursor: "pointer" }}>
+          <img src={logo} alt="ChessLearn Logo" />
+        </a>
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+
+      <nav className={`header-nav ${isMenuOpen ? "open" : ""}`}>
+        <a href="#" onClick={() => handleNavigation("/jugar")}>
           Jugar
         </a>
-        <a href="#" onClick={() => navigate("/lecciones")}>
+        <a href="#" onClick={() => handleNavigation("/lecciones")}>
           Lecciones
         </a>
-        <a href="#" onClick={() => navigate("/jugar")}>
+        <a href="#" onClick={() => handleNavigation("/historial")}>
           Historial
         </a>
-        <a href="#" onClick={() => navigate("/jugar")}>
+        <a href="#" onClick={() => handleNavigation("/ranking")}>
           Ranking
         </a>
-      </div>
+      </nav>
       <div className="header-avatar">
         <a href="" onClick={() => navigate("/perfil")}>
           <img
             src={usuario?.avatar ? usuario.avatar : "/assets/avatar.png"}
             alt="Avatar"
-            style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+            className="avatar-image"
           />
         </a>
         <a onClick={logout} style={{ cursor: "pointer" }}>

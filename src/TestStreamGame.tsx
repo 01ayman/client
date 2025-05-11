@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 
 const TestStreamGame = ({ gameId }: { gameId: string }) => {
-  // const [ws, setWs] = useState<WebSocket | null>(null);
   const [gameState, setGameState] = useState<any>(null);
 
   useEffect(() => {
     const socket = new WebSocket(
-      `wss://lichess.org/api/board/game/stream/${gameId}`
+      `wss:lichess.org/api/board/game/stream/${gameId}`
     );
 
     socket.onopen = () => {
@@ -14,17 +13,17 @@ const TestStreamGame = ({ gameId }: { gameId: string }) => {
     };
 
     socket.onmessage = (event) => {
-      console.log("📨 Evento recibido:", event.data);
+      // console.log("📨 Evento recibido:", event.data);
 
       try {
         const eventData = JSON.parse(event.data);
-        console.log("📦 Datos parseados:", eventData);
+        // console.log("📦 Datos parseados:", eventData);
 
         if (eventData.type === "gameState") {
           setGameState(eventData);
           // Aquí puedes procesar los movimientos, por ejemplo:
           if (eventData.moves) {
-            console.log("Movimientos recibidos:", eventData.moves);
+            // console.log("Movimientos recibidos:", eventData.moves);
           }
         }
       } catch (err) {
@@ -40,9 +39,7 @@ const TestStreamGame = ({ gameId }: { gameId: string }) => {
       console.log("Conexión WebSocket cerrada");
     };
 
-    // setWs(socket);
 
-    // Cleanup: cerrar WebSocket cuando el componente se desmonte
     return () => {
       socket.close();
     };

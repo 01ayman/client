@@ -31,7 +31,6 @@ export default function Lecciones() {
         const data = await loadCompleteLeccionesData();
         setLeccionesData(data);
 
-        // Asumimos que tienes el usuario_id guardado en localStorage
         const usuarioId = parseInt(localStorage.getItem("usuario_id") || "0");
         if (usuarioId && data?.lessons) {
           await cargarProgresos(usuarioId, data.lessons);

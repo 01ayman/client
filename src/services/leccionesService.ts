@@ -1,8 +1,6 @@
-// import { LeccionesData } from "../pages/lecciones/Lecciones";
 
 import { API_URL } from "../constants/GlobalConstants";
 
-// Tipos base
 export interface Ejercicio {
   id: number;
   titulo: string;
@@ -27,9 +25,6 @@ export interface ProgresoLeccion {
   estado: "en_progreso" | "completada";
 }
 
-// URL base
-
-// ---- Lecciones ----
 
 export async function getLecciones(): Promise<Leccion[]> {
   try {
@@ -42,7 +37,6 @@ export async function getLecciones(): Promise<Leccion[]> {
   }
 }
 
-// ---- Ejercicios ----
 
 export async function getEjercicios(): Promise<Ejercicio[]> {
   try {
@@ -71,7 +65,6 @@ export async function getEjerciciosByLeccionId(
   }
 }
 
-// ---- Progreso ----
 
 export async function updateLessonProgress(
   usuarioId: number,
@@ -103,7 +96,7 @@ export async function getProgresoLeccion(
     const res = await fetch(`${API_URL}${usuarioId}/${leccionId}`);
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (err) {
     console.error(
@@ -114,7 +107,6 @@ export async function getProgresoLeccion(
   }
 }
 
-// ---- Carga completa para LeccionesData ----
 
 export async function loadCompleteLeccionesData(): Promise<any> {
   try {
@@ -123,7 +115,7 @@ export async function loadCompleteLeccionesData(): Promise<any> {
       getEjercicios(),
     ]);
 
-    console.log(lecciones);
+    // console.log(lecciones);
 
     const lessonsWithEjercicios = lecciones.map((leccion) => ({
       ...leccion,
@@ -132,8 +124,6 @@ export async function loadCompleteLeccionesData(): Promise<any> {
 
     return {
       lessons: lessonsWithEjercicios,
-      // En caso de necesitar incluir progreso:
-      // progreso: await getProgresoLecciones(usuarioId)
     };
   } catch (err) {
     console.error("Error al cargar datos completos de lecciones:", err);

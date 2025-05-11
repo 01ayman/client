@@ -1,4 +1,3 @@
-// userService.ts
 import { API_URL } from "../constants/GlobalConstants";
 
 const getToken = () => {
@@ -7,7 +6,7 @@ const getToken = () => {
 
 const getAuthHeader = () => {
   const token = getToken();
-  console.log(token);
+  // console.log(token);
   if (!token) throw new Error("No autenticado");
 
   return {
@@ -37,7 +36,7 @@ export const updateProfile = async (data: {
 
   const response = await fetch(`${API_URL}users/update-profile`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}` }, // No content-type here for multipart
+    headers: { Authorization: `Bearer ${token}` }, 
     body: formData,
   });
 
@@ -69,15 +68,15 @@ export const updateEmail = async (
 };
 
 export const updateName = async (name: string) => {
-  console.log(name);
-  console.log(getAuthHeader());
+  // console.log(name);
+  // console.log(getAuthHeader());
   const response = await fetch(`${API_URL}usuarios/update-name`, {
     method: "PATCH",
     headers: getAuthHeader(),
     body: JSON.stringify({ name }),
   });
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   if (!response.ok) throw new Error("Error actualizando email");
   return data;
 };

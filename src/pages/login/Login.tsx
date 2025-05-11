@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Message } from "../../components/Utils/Message";
 import ChessError from "../../components/Utils/Error";
 import { useAuth } from "../../context/AuthContext";
-import { Loader } from "../../components/Utils/Loader"; // Importa el componente Loader
+import { Loader } from "../../components/Utils/Loader"; 
 import { API_URL, isProduction } from "../../constants/GlobalConstants";
 
 const urlLogin = API_URL + "auth/login";
@@ -21,7 +21,7 @@ const Login = () => {
   const [verifyMessage, setVerifyMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isVerified, setIsVerified] = useState(true);
-  const [loading, setLoading] = useState(false); // Estado para el loader
+  const [loading, setLoading] = useState(false);
   const { usuario, login } = useAuth();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const Login = () => {
   const sendVerificationEmail = async () => {
     setError("");
     setVerifyMessage("");
-    setLoading(true); // Activar loader
+    setLoading(true); 
     try {
       const response = await fetch(urlEmail, {
         method: "POST",
@@ -42,7 +42,7 @@ const Login = () => {
         body: JSON.stringify({ correo: user, contrasena: password }),
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (!response.ok) {
         setError(data.error || "Error en el login");
         return;
@@ -55,7 +55,7 @@ const Login = () => {
     } catch (err) {
       setError("Error de conexión con el servidor");
     } finally {
-      setLoading(false); // Desactivar loader
+      setLoading(false); 
     }
   };
 
@@ -63,9 +63,9 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setVerifyMessage("");
-    setLoading(true); // Activar loader
-    console.log(API_URL);
-    console.log(isProduction);
+    setLoading(true); 
+    // console.log(API_URL);
+    // console.log(isProduction);
     if (!user || !password) {
       alert("Por favor, completa todos los campos.");
       setLoading(false);
@@ -87,7 +87,7 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (!response.ok) {
         setError(data.error || "Error en el login");
         return;
@@ -112,18 +112,18 @@ const Login = () => {
     } catch (err) {
       setError("Error de conexión con el servidor");
     } finally {
-      setLoading(false); // Desactivar loader
+      setLoading(false); 
     }
   };
 
   useEffect(() => {
     if (token && !usuario) {
-      setLoading(true); // Activar loader durante verificación
+      setLoading(true); 
       if (location.pathname.includes("verify")) {
         fetch(`${API_URL}auth/verify/${id}/${token}`)
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
+            // console.log(data);
             if (data === true) {
               setVerifyMessage(
                 "¡Cuenta verificada correctamente! Ya puedes iniciar sesión."
@@ -135,7 +135,7 @@ const Login = () => {
             }
           })
           .catch(() => setError("Error al verificar el token."))
-          .finally(() => setLoading(false)); // Desactivar loader
+          .finally(() => setLoading(false)); 
       }
     }
   }, [token]);

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Chess } from "chess.js";
-import { Chessboard } from "react-chessboard";
-import "./Ejercicio.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { updateLessonProgress } from "../../services/leccionesService";
+import Tablero from "../../components/Tablero/Tablero";
+import "./Ejercicio.css";
 
 export default function Ejercicio() {
   const location = useLocation();
@@ -17,7 +17,6 @@ export default function Ejercicio() {
   const [ejercicioCompletado, setEjercicioCompletado] = useState(false);
   const [mostrarSolucion, setMostrarSolucion] = useState(false);
   const [feedback, setFeedback] = useState("");
-  const [wrongMove, setWrongMove] = useState(false);
   const { usuario } = useAuth();
 
   useEffect(() => {
@@ -31,44 +30,39 @@ export default function Ejercicio() {
     }
   }, [ejercicio]);
 
-  const onDrop = (sourceSquare: string, targetSquare: string) => {
-    if (!game || !ejercicio) return false;
+  const makeAMove = async (move: {
+    from: string;
+    to: string;
+    promotion?: string;
+  }) => {
+    if (!game || !ejercicio) return null;
 
-    const movimientoActual = `${sourceSquare}${targetSquare}`;
+    const movimientoActual = `${move.from}${move.to}`;
     const soluciones = ejercicio.movimientoSolucion
       .split(",")
       .map((m: string) => m.trim());
 
     if (soluciones.includes(movimientoActual)) {
-      const gameCopy = new Chess(game.fen());
-      const move = gameCopy.move({
-        from: sourceSquare,
-        to: targetSquare,
-        promotion: "q",
-      });
-
-      if (move) {
-        setGame(gameCopy);
-        setMovimientosRealizados((prev) => [...prev, move.san]);
+      const moveResult = game.move(move);
+      if (moveResult) {
+        setMovimientosRealizados((prev) => [...prev, moveResult.san]);
         setFeedback("¡Correcto! Has encontrado la solución.");
         setEjercicioCompletado(true);
-        actualizarProgreso();
-        return true;
+        await actualizarProgreso();
+        return moveResult;
       }
     } else {
       setFeedback("Movimiento incorrecto. Intenta de nuevo.");
-      setWrongMove(true);
-      setTimeout(() => setWrongMove(false), 500);
-      return false;
+      return null;
     }
-    return false;
+    return null;
   };
 
   const actualizarProgreso = async () => {
     if (!usuario || !ejercicio) return;
 
     try {
-      await updateLessonProgress(usuario.id!, ejercicio.id);
+      // await updateLessonProgress(usuario.id!, ejercicio.id);
     } catch (error) {
       console.error("Error al actualizar progreso:", error);
       setFeedback((prev) => prev + " (No se pudo guardar el progreso)");
@@ -126,17 +120,11 @@ export default function Ejercicio() {
 
         <div className="ejercicio-content">
           <div className="chessboard-container">
-            <Chessboard
-              position={game.fen()}
-              onPieceDrop={onDrop}
-              boardOrientation="white"
-              customBoardStyle={{
-                borderRadius: "4px",
-                boxShadow: wrongMove
-                  ? "0 0 10px rgba(255, 0, 0, 0.7)"
-                  : "0 5px 15px rgba(0, 0, 0, 0.5)",
-                transition: "box-shadow 0.3s ease",
-              }}
+            <Tablero
+              game={game}
+              makeAMove={makeAMove}
+              waitingForAI={false}
+              playerColor="w"
             />
           </div>
 

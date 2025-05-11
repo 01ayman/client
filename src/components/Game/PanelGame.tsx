@@ -5,7 +5,6 @@ import { usePartida } from "../../context/PartidaContext";
 import "./PanelGame.css";
 import { useAuth } from "../../context/AuthContext";
 import { Chess } from "chess.js";
-
 import { createGame, terminarPartida } from "../../services/lichessBotService";
 
 interface PanelGameProps {
@@ -42,60 +41,14 @@ const PanelGame = ({
     }
   }, [juegoTerminado]);
 
-  // Actualizar movimientos cuando cambia el juego
-  // useEffect(() => {
-  //   if (game.isGameOver()) {
-
-  //     setTimeout(() => {
-  //       alert("¡La partida ha terminado!");
-  //       window.history.back(); // o usa navigate(-1) si prefieres
-  //     }, 300); // un pequeño delay para evitar conflictos visuales
-  //   }
-  // }, [game]);
-
   const reset = () => {
+    setMovimientos([]);
     setJuegoTerminado(false);
     setGameState(null);
   };
 
-  useEffect(() => {
-    if (game.isGameOver() || juegoTerminado) {
-      console.log("PARTIDA");
-      console.log(partida);
-    }
-  }, [game, juegoTerminado]);
-
   const handleRematch = async () => {
-    console.log(partida);
     buscarPartida();
-    // if (!partida) {
-    //   return;
-    // }
-    // setPartida(partida);
-
-    // try {
-    //   const response = await createGame({
-    //     level: partida.dificultad,
-    //     clock: {
-    //       limit: partida.tiempo,
-    //       increment: 0,
-    //     },
-    //     color: "white",
-    //   });
-
-    //   const newPartida = {
-    //     id: response.id,
-    //     tiempo: partida.tiempo,
-    //     dificultad: partida.dificultad,
-    //     modo: partida.modo,
-    //   };
-
-    //   setPartida(newPartida);
-    //   onReset();
-    // } catch (error) {
-    //   console.error("Error al crear nueva partida:", error);
-    //   alert("Error al crear nueva partida");
-    // }
   };
 
   useEffect(() => {
@@ -131,10 +84,6 @@ const PanelGame = ({
 
   const buscarPartida = async () => {
     reset();
-    console.log(modo);
-    console.log(tiempo);
-    console.log(dificultad);
-    console.log(partida);
     if (modo === "Contra máquina") {
       const response = await createGame({
         level: dificultad,
@@ -217,23 +166,21 @@ const PanelGame = ({
         </div>
 
         {modo === "Contra máquina" && (
-          <>
-            <div className="panel-section">
-              <label className="panel-label" htmlFor="dificultad-input">
-                DIFICULTAD (1-8)
-              </label>
-              <input
-                type="range"
-                id="dificultad-input"
-                className="panel-range"
-                min="1"
-                max="8"
-                value={dificultad}
-                onChange={(e) => setDificultad(parseInt(e.target.value))}
-              />
-              <div className="dificultad-value">{dificultad}</div>
-            </div>
-          </>
+          <div className="panel-section">
+            <label className="panel-label" htmlFor="dificultad-input">
+              DIFICULTAD (1-8)
+            </label>
+            <input
+              type="range"
+              id="dificultad-input"
+              className="panel-range"
+              min="1"
+              max="8"
+              value={dificultad}
+              onChange={(e) => setDificultad(parseInt(e.target.value))}
+            />
+            <div className="dificultad-value">{dificultad}</div>
+          </div>
         )}
 
         <div className="panel-section">
@@ -278,23 +225,18 @@ const PanelGame = ({
   }
 
   function resign(color: "w" | "b") {
-    // Marcar la partida como terminada
     const winner = color === "w" ? "negras" : "blancas";
     setJuegoTerminado(true);
     setGameState(`El jugador se ha rendido. Ganan las ${winner}.`);
     terminarPartida(partida.id);
-    // onReset();
   }
 
   function draw() {
-    // Marcar la partida como terminada
     const winner = game.turn() === "w" ? "blancas" : "negras";
     terminarPartida(partida.id);
     setJuegoTerminado(true);
     setGameState(`El jugador de las ${winner} ofreció tablas`);
     onReset();
-    // En tu lógica de aplicación:
-    console.log(`Partida terminada por rendición. Ganan las ${winner}`);
   }
 
   return (
@@ -337,12 +279,10 @@ const PanelGame = ({
               <span>La máquina está pensando...</span>
             </div>
           )}
-          {game.inCheck() ? (
+          {game.inCheck() && (
             <div className="ia-pensando">
               <span>Jaque</span>
             </div>
-          ) : (
-            ""
           )}
         </div>
       </div>
@@ -369,6 +309,7 @@ const PanelGame = ({
                 onReset();
                 setPartida(null);
                 terminarPartida(partida.id);
+                reset();
               }}
             >
               Volver atrás
@@ -379,10 +320,9 @@ const PanelGame = ({
 
       <div className="panel-botones">
         <button
-          className={`panel-boton`}
+          className="panel-boton"
           disabled={game.turn() !== color}
           onClick={() => {
-            console.log("a");
             onReset();
             terminarPartida(partida.id);
             draw();

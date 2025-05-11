@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import { Header } from "./components/Header/Header"
 import MainPage from "./components/MainPage/MainPage";
 import Login from "./pages/login/Login";
 import Registro from "./pages/registro/Registro";

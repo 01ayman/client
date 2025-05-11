@@ -1,9 +1,11 @@
 .ejercicio-container {
-  max-width: 1200px;
+  min-width: 100vw;
   margin: 0 auto;
   padding: 2rem;
   color: white;
   background: url("/assets/main_image.png") center/cover no-repeat;
+  display: flex;
+  justify-content: center;
 }
 
 .opacity-container {
@@ -17,6 +19,7 @@
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* Sombra suave */
   padding: 20px; /* Espaciado interno */
   color: white; /* Color de texto */
+  width: 70%;
 }
 
 .ejercicio-header {
@@ -48,12 +51,9 @@
 
 .ejercicio-content {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 2rem;
-}
-
-.chessboard-container {
-  flex: 1;
-  max-width: 600px;
 }
 
 .ejercicio-info {

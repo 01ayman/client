@@ -22,7 +22,7 @@ const ContrasenaOlvidada = () => {
           body: JSON.stringify({ correo: email }),
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         if (!response.ok) {
           return;
         }

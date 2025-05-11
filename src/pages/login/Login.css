@@ -1,108 +1,146 @@
 .login-bg {
-    min-height: 100vh;
-    background: url('/assets/main_image.png') center/cover no-repeat;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  min-height: 100vh;
+  background: url("/assets/main_image.png") center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem; /* Añadido para evitar que el contenido toque los bordes */
 }
 
 .login-form-container {
-    background: #23190f;
-    color: #fff;
-    border-radius: 40px;
-    padding: 40px 40px 30px 40px;
-    min-width: 400px;
-    max-width: 90vw;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    margin: 3.5rem 0;
+  background: #23190f;
+  color: #fff;
+  border-radius: 40px;
+  padding: 40px 40px 30px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 3.5rem 0;
 }
 
 .login-title {
-    text-align: center;
-    font-family: 'Irish Grover', cursive;
-    font-size: 2rem;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+  text-align: center;
+  font-family: "Irish Grover", cursive;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
 }
 
 .login-input {
-    padding: 15px 20px;
-    border-radius: 30px;
-    border: 1px solid #ccc;
-    background: transparent;
-    color: #fff;
-    font-size: 1.1rem;
-    outline: none;
-    margin-bottom: 10px;
+  padding: 15px 20px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  background: transparent;
+  color: #fff;
+  font-size: 1.1rem;
+  outline: none;
+  margin-bottom: 10px;
 }
 
 .login-input::placeholder {
-    color: #ccc;
-    opacity: 1;
+  color: #ccc;
+  opacity: 1;
 }
 
 .login-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  flex-wrap: wrap; /* Permite que se acomode en pantallas pequeñas */
+  gap: 10px;
 }
 
 .login-checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .login-btn {
-    background: #000;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 12px 0;
-    font-size: 1.3rem;
-    font-family: 'Irish Grover', cursive;
-    letter-spacing: 2px;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background 0.3s;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 0;
+  font-size: 1.3rem;
+  font-family: "Irish Grover", cursive;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .login-btn:hover {
-    background: #140d7a;
+  background: #140d7a;
 }
 
 .login-register {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1.1rem;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1.1rem;
 }
 
 .login-register-link {
-    color: #fff;
-    text-decoration: underline;
-    font-weight: bold;
-    cursor: pointer;
+  color: #fff;
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
 }
-.verify-btn{
-    background: #ff0000;
-    width: fit-content;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 12px 10px;
-    font-size: 0.8rem;
-    font-family: 'Irish Grover', cursive;
-    letter-spacing: 2px;
-    margin-top: 10px;
-    cursor: pointer;
-    transition: background 0.3s;
-    align-self: center;
+
+.verify-btn {
+  background: #ff0000;
+  width: fit-content;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 10px;
+  font-size: 0.8rem;
+  font-family: "Irish Grover", cursive;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+  align-self: center;
 }
-.verify-btn:hover{
-    background: #6d4c4c;
+
+.verify-btn:hover {
+  background: #6d4c4c;
+}
+
+/* RESPONSIVE: para pantallas menores a 480px */
+@media (max-width: 480px) {
+  .login-form-container {
+    padding: 25px 20px;
+    border-radius: 30px;
+    gap: 20px;
+  }
+
+  .login-title {
+    font-size: 1.6rem;
+  }
+
+  .login-input {
+    font-size: 1rem;
+    padding: 12px 15px;
+  }
+
+  .login-btn {
+    font-size: 1.1rem;
+    padding: 10px 0;
+  }
+
+  .login-options {
+    font-size: 0.9rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .login-register {
+    font-size: 1rem;
+  }
 }

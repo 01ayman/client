@@ -16,7 +16,7 @@ const CambiarContrasena = () => {
     setMessage("");
     e.preventDefault();
     if (newPassword === confirmPassword) {
-      console.log(newPassword);
+      // console.log(newPassword);
       try {
         const response = await fetch(urlEmail, {
           method: "POST",
@@ -30,7 +30,7 @@ const CambiarContrasena = () => {
           }),
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         if (!response.ok) {
           setMessage("Ha ocurrido un error, intente de nuevo");
           return;

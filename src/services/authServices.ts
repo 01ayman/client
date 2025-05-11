@@ -14,7 +14,7 @@ export const login = async (correo: string, contrasena: string) => {
     throw new Error(errorData.message || "Error en el login");
   }
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data;
 };
 

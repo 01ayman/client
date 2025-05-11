@@ -10,3 +10,66 @@
 .invalid-move {
   animation: invalidMoveFlash 0.5s ease-out;
 }
+/* Tablero.css */
+@keyframes invalidMoveFlash {
+  0% {
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.7);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+.chess-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.chessboard-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+.invalid-move {
+  animation: invalidMoveFlash 0.5s ease-out;
+}
+
+/* Mobile optimizations */
+@media (max-width: 600px) {
+  .chess-container {
+    padding: 5px;
+  }
+
+  #responsive-chessboard {
+    /* Adjust piece sizes for mobile */
+    --piece-scale: 0.9;
+  }
+
+  #responsive-chessboard .react-chessboard-pieces {
+    transform: scale(var(--piece-scale));
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 601px) and (max-width: 900px) {
+  #responsive-chessboard {
+    --piece-scale: 1;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  #responsive-chessboard .react-chessboard-square {
+    /* Increase touch targets */
+    padding: 2px;
+  }
+
+  #responsive-chessboard .react-chessboard-piece {
+    /* Make pieces slightly larger for touch */
+    transform: scale(1.05);
+  }
+}

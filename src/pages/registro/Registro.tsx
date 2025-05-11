@@ -18,7 +18,7 @@ const Registro = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Nuevo estado para el loader
+  const [loading, setLoading] = useState(false); 
   const { usuario } = useAuth();
 
   useEffect(() => {
@@ -41,11 +41,11 @@ const Registro = () => {
     e.preventDefault();
     setMessage("");
     setError("");
-    setLoading(true); // Activar loader al iniciar el registro
+    setLoading(true); 
 
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden");
-      setLoading(false); // Desactivar loader si hay error
+      setLoading(false); 
       return;
     }
 
@@ -71,14 +71,14 @@ const Registro = () => {
         setLoading(false);
         return;
       }
-      console.log(data)
+      // console.log(data)
       if (data.code !== 200) {
         setError(data.message);
         setLoading(false);
         return;
       } else {
         setMessage(data.message);
-        // Redirigir después de un breve retraso para que se vea el mensaje
+        
         setTimeout(() => {
           navigate("/login");
         }, 1500);
@@ -86,7 +86,7 @@ const Registro = () => {
     } catch (err) {
       setError("Error de conexión con el servidor");
     } finally {
-      setLoading(false); // Desactivar loader en cualquier caso
+      setLoading(false); 
     }
   };
 
@@ -101,7 +101,7 @@ const Registro = () => {
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           required
-          disabled={loading} // Deshabilitar campos durante el loading
+          disabled={loading} 
         />
         <input
           type="email"
@@ -133,7 +133,7 @@ const Registro = () => {
         <button
           type="submit"
           className="registro-btn"
-          disabled={loading} // Deshabilitar botón durante el loading
+          disabled={loading} 
         >
           {loading ? <Loader size="small" /> : "Registrarse"}
         </button>

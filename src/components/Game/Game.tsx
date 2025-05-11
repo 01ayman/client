@@ -1,13 +1,8 @@
-// src/components/Game.tsx
-
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Chess } from "chess.js";
 import Tablero from "../Tablero/Tablero";
 import PanelGame from "./PanelGame";
-import {
-  makeMove,
-  streamGame,
-} from "../../services/lichessBotService";
+import { makeMove, streamGame } from "../../services/lichessBotService";
 import "./Game.css";
 import { usePartida } from "../../context/PartidaContext";
 
@@ -17,112 +12,55 @@ const Game = () => {
   const [playerColor, setPlayerColor] = useState<"w" | "b">("w");
   const [waitingForAI, setWaitingForAI] = useState(false);
   const { partida } = usePartida();
-  const [tBlancas, setTBlancas] = useState(
-    // partida ? `${partida.tiempo / 60}:00` : "0:00"
-    0
-  );
-
-  const [tNegras, setTNegras] = useState(
-    // partida ? `${partida.tiempo / 60}:00` : "0:00"
-    0
-  );
+  const [whiteTime, setWhiteTime] = useState(0);
+  const [blackTime, setBlackTime] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastUpdateRef = useRef<number>(Date.now());
 
   const reload = () => {
     setGame(new Chess());
     setGameId(null);
     setPlayerColor("w");
     setWaitingForAI(false);
+    if (timerRef.current) clearInterval(timerRef.current);
   };
 
-  useEffect(() => {
-    if (!partida) {
-      reload();
-      return;
+  const startTimer = () => {
+    stopTimer();
+
+    timerRef.current = setInterval(() => {
+      const now = Date.now();
+      const delta = now - lastUpdateRef.current; // Diferencia en ms
+      lastUpdateRef.current = now;
+
+      if (game.isGameOver()) return;
+
+      if (game.turn() === "w") {
+        setWhiteTime((prev) => {
+          const newTime = prev - delta;
+          if (newTime <= 0) handleTimeOut("w");
+          return Math.max(0, newTime);
+        });
+      } else {
+        setBlackTime((prev) => {
+          const newTime = prev - delta;
+          if (newTime <= 0) handleTimeOut("b");
+          return Math.max(0, newTime);
+        });
+      }
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-    // setTBlancas(partida.tiempo);
-    // setTNegras(partida.tiempo);
-    console.log("entra");
-    setGameId(partida.id);
-    console.log("empieza la partida");
-    console.log(partida.id);
-    // const startGame = async () => {
-    console.log("empezamos");
-    // const cleanup =
-    const cleanup = streamGame(partida.id, {
-      onMessage: (event: any) => {
-        console.log("Evento recibido:", event);
-        // const myTime = `${playerColor}time`;
-        if (
-          (event.wtime = 0 && playerColor == "w") ||
-          (event.btime = 0 && playerColor == "b")
-        ) {
-          return;
-        }
-        if (event.type === "gameFull") {
-          // Actualizar el estado del juego
-          if (event.initialFen == "startpos") {
-            setGame(new Chess());
-          } else {
-            setGame(new Chess(event.initialFen));
-          }
-        }
+  };
 
-        // Manejar movimientos
-        if (event.type === "gameState" && event.moves) {
-          const newGame = new Chess();
-          event.moves.split(" ").forEach((move: any) => {
-            try {
-              // setTimeout(() => {
-              newGame.move(move);
-              // }, 3000);
-            } catch (e) {
-              console.error("Movimiento inválido:", move);
-            }
-          });
-
-          setGame(newGame);
-          setWaitingForAI(newGame.turn() !== playerColor);
-          if (event.wtime && event.btime) {
-            setTBlancas(event.wtime);
-            setTNegras(event.btime);
-          }
-        }
-
-        // Manejar fin de juego
-        // if (event.type === "gameOver") {
-        //   setGameState(
-        //     `Juego terminado: ${
-        //       event.winner
-        //         ? event.winner === "white"
-        //           ? "Blancas ganan"
-        //           : "Negras ganan"
-        //         : "Empate"
-        //     }`
-        //   );
-        //   setWaitingForAI(false);
-        // }
-      },
-      onError: (error: any) => {
-        console.log("Error de conexión:", error);
-      },
-      onEnd: (reason) => {
-        console.log(`Partida terminada por: ${reason}`);
-        console.log(tNegras);
-        console.log(tBlancas);
-        // Ejemplo de manejo:
-        // if (reason === "timeout") {
-        //   setGameState("Se acabó el tiempo");
-        //   alert("¡Se acabó el tiempo!");
-        // } else if (reason === "checkmate") {
-        //   alert("¡Jaque mate!");
-        // }
-      },
-    });
-
-    return () => {
-      cleanup();
-    };
-  }, [partida]);
+  const handleTimeOut = (color: "w" | "b") => {
+    stopTimer();
+  };
 
   const formatTime = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -132,18 +70,67 @@ const Game = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (waitingForAI) return;
-      if (game.turn() === "w") {
-        setTBlancas((prev) => Math.max(0, prev - 1000));
-        // console.log("a" + tBlancas);
-      } else {
-        setTNegras((prev) => Math.max(0, prev - 1000));
-      }
-    }, 1000);
+    if (!partida) {
+      reload();
+      return;
+    }
+    setGameId(partida.id);
+    const initialTime = partida.tiempo * 1000; // Convertir a ms
+    setWhiteTime(initialTime);
+    setBlackTime(initialTime);
+    lastUpdateRef.current = Date.now();
+    startTimer();
+    const cleanup = streamGame(partida.id, {
+      onMessage: (event: any) => {
+        if (
+          (event.wtime = 0 && playerColor == "w") ||
+          (event.btime = 0 && playerColor == "b")
+        ) {
+          return;
+        }
+        if (event.type === "gameFull") {
+          if (event.initialFen == "startpos") {
+            setGame(new Chess());
+          } else {
+            setGame(new Chess(event.initialFen));
+          }
+        }
 
-    return () => clearInterval(interval);
-  }, [game, waitingForAI]);
+        if (event.type === "gameState" && event.moves) {
+          const newGame = new Chess();
+          event.moves.split(" ").forEach((move: any) => {
+            try {
+              newGame.move(move);
+            } catch (e) {
+              console.error("Movimiento inválido:", move);
+            }
+          });
+
+          setGame(newGame);
+          setWaitingForAI(newGame.turn() !== playerColor);
+
+          if (event.wtime && event.btime) {
+            setWhiteTime(event.wtime);
+            setBlackTime(event.btime);
+            lastUpdateRef.current = Date.now();
+          }
+        }
+      },
+      onError: (error: any) => {
+         console.error("Error de conexión:", error);
+        stopTimer();
+      },
+      onEnd: (reason) => {
+        console.error(`Partida terminada por: ${reason}`);
+        stopTimer();
+      },
+    });
+
+    return () => {
+      cleanup();
+      stopTimer();
+    };
+  }, [partida]);
 
   const makeAMove = useCallback(
     async (move: { from: string; to: string; promotion?: string }) => {
@@ -152,15 +139,31 @@ const Game = () => {
       const moveString = `${move.from}${move.to}${move.promotion || ""}`;
       try {
         const valid = await makeMove(gameId, moveString);
-        if (valid.ok) setWaitingForAI(true);
+        if (valid.ok) {
+          setWaitingForAI(true);
+          lastUpdateRef.current = Date.now();
+        }
         return move;
       } catch (error) {
-        console.log("Error al realizar el movimiento:", error);
+        console.error("Error al realizar el movimiento:", error);
         return null;
       }
     },
     [gameId]
   );
+
+  useEffect(() => {
+    if (!game.isGameOver()) {
+      startTimer();
+    }
+    return () => stopTimer();
+  }, [game.turn()]);
+
+  useEffect(() => {
+    if (whiteTime <= 0 || blackTime <= 0) {
+      stopTimer();
+    }
+  }, [whiteTime, blackTime]);
 
   return (
     <div className="game-container">
@@ -170,8 +173,8 @@ const Game = () => {
           reload();
         }}
         waitingForAI={waitingForAI}
-        tBlancas={formatTime(tBlancas)}
-        tNegras={formatTime(tNegras)}
+        tBlancas={formatTime(whiteTime)}
+        tNegras={formatTime(blackTime)}
         color={playerColor}
       />
       <Tablero

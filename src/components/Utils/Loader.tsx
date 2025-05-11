@@ -1,6 +1,5 @@
-// components/Utils/Loader.tsx
 import React from "react";
-import "./Loader.css"; // Estilos para el loader
+import "./Loader.css"; 
 
 interface LoaderProps {
   size?: "small" | "medium" | "large";

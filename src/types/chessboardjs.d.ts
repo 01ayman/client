@@ -108,7 +108,6 @@ declare module '@chrisoakman/chessboardjs' {
 
   function Chessboard(container: string | HTMLElement, config?: ChessboardConfig): ChessboardInstance;
 
-  // Funciones utilitarias
   function fenToObj(fen: string): Record<Square, PieceCode> | false;
   function objToFen(obj: Record<Square, PieceCode>): string | false;
 

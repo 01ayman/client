@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import "./EstadoPagina.css"; // Nuevo archivo CSS para estos estados
+import "./EstadoPagina.css"; 
 
 type EstadoPaginaProps = {
   tipo: "loading" | "error" | "notFound" | "noData";
@@ -53,8 +53,8 @@ export default function EstadoPagina({
         <div>{children}</div>
 
         {mostrarBotonVolver && (
-          <button className="estado-pagina-boton" onClick={() => navigate(-1)}>
-            Volver atrás
+          <button className="estado-pagina-boton" onClick={() => navigate("/")}>
+            Ir a inicio
           </button>
         )}
       </div>

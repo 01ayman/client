@@ -6,7 +6,6 @@ import { useAuth } from "../../context/AuthContext";
 const socket = io("http://localhost:3001");
 
 const BuscarPartida = () => {
-  // const [mensaje, setMensaje] = useState('🔎 Buscando partida...');
   const { state } = useLocation();
   const navigate = useNavigate();
   const { usuario } = useAuth();
@@ -20,7 +19,7 @@ const BuscarPartida = () => {
     });
 
     socket.on("partida_encontrada", (data) => {
-      console.log("✅ Partida encontrada:", data);
+      // console.log("✅ Partida encontrada:", data);
       navigate(`/partida/${data.partidaId}`, { state: data });
     });
 
