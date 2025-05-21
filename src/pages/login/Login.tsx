@@ -202,7 +202,9 @@ const Login = () => {
             }}
             onClick={(e) => {
               e.preventDefault();
-              !loading && navigate("/cambiar-contrasena");
+              if (!loading) {
+                navigate("/cambiar-contrasena");
+              }
             }}
           >
             ¿Contraseña olvidada?
@@ -222,7 +224,9 @@ const Login = () => {
             }}
             onClick={(e) => {
               e.preventDefault();
-              !loading && navigate("/registro");
+              if (!loading) {
+                navigate("/registro");
+              }
             }}
           >
             Regístrate

@@ -1,4 +1,7 @@
+import { Chess } from "chess.js";
 import { API_URL } from "../constants/GlobalConstants";
+import { usePartida } from "../context/PartidaContext";
+import { getAuthHeader } from "./userService";
 
 interface GameSettings {
   level?: number;
@@ -34,9 +37,22 @@ interface MoveResponse {
   ok: boolean;
 }
 
-interface GameEvent {
+export interface GameEvent {
   type: string;
-  [key: string]: any;
+  moves: string; // Lista de movimientos en formato UCI, separados por espacios
+  wtime: number; // Tiempo restante para las blancas (en milisegundos)
+  btime: number; // Tiempo restante para las negras (en milisegundos)
+  winc: number; // Incremento por movimiento de blancas (en milisegundos)
+  binc: number; // Incremento por movimiento de negras (en milisegundos)
+  status:
+    | "started"
+    | "aborted"
+    | "mate"
+    | "resign"
+    | "stalemate"
+    | "draw"
+    | "timeout"
+    | string;
 }
 
 const API_TOKEN = import.meta.env.VITE_LICHESS_TOKEN;
@@ -140,8 +156,49 @@ export function streamGame(gameId: string, handlers: GameHandlers): () => void {
   };
 }
 
-export async function terminarPartida(gameId: string): Promise<boolean> {
+export async function terminarPartida(
+  gameId: string,
+  reason: string,
+  game: any,
+  partida: any,
+  movimientos: string[]
+): Promise<any> {
+  const lastPos = Object.keys(game._positionCount)[
+    Object.keys(game._positionCount).length - 1
+  ];
+
+  const p: any = {
+    id: partida.id,
+    fecha_inicio: partida.fecha,
+    fecha_final: new Date(),
+    tiempo: Number(partida.tiempo) / 60,
+    fen_final: lastPos,
+    movimientos: movimientos.join(","),
+    contra_maquina: true,
+    nivel_maquina: partida.dificultad,
+    creada_en: partida.fecha,
+    resultado: "0-1",
+  };
   const res = await fetch(`${API_URL}lichess/resign/${gameId}`);
-  const data = res.ok;
+
+  if (res.ok) {
+    switch (reason) {
+      case "abandono":
+        p.resultado = "0-1";
+        break;
+      case "empate":
+        p.resultado = "1-1";
+        break;
+      default:
+        break;
+    }
+  }
+
+  const ins = await fetch(`${API_URL}usuarios/insertar-partida`, {
+    method: "POST",
+    headers: getAuthHeader(),
+    body: JSON.stringify({ partida: p }),
+  });
+  const data = ins.ok;
   return data;
 }

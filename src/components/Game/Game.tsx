@@ -2,9 +2,14 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { Chess } from "chess.js";
 import Tablero from "../Tablero/Tablero";
 import PanelGame from "./PanelGame";
-import { makeMove, streamGame } from "../../services/lichessBotService";
+import {
+  GameEvent,
+  makeMove,
+  streamGame,
+} from "../../services/lichessBotService";
 import "./Game.css";
 import { usePartida } from "../../context/PartidaContext";
+import { GameState } from "../../utils/IGame";
 
 const Game = () => {
   const [game, setGame] = useState(new Chess());
@@ -84,8 +89,8 @@ const Game = () => {
     const cleanup = streamGame(partida.id, {
       onMessage: (event: any) => {
         if (
-          (event.wtime = 0 && playerColor == "w") ||
-          (event.btime = 0 && playerColor == "b")
+          (event.wtime === 0 && playerColor === "w") ||
+          (event.btime === 0 && playerColor === "b")
         ) {
           return;
         }
@@ -102,7 +107,7 @@ const Game = () => {
           event.moves.split(" ").forEach((move: any) => {
             try {
               newGame.move(move);
-            } catch (e) {
+            } catch (err: any) {
               console.error("Movimiento inválido:", move);
             }
           });
@@ -122,7 +127,7 @@ const Game = () => {
         stopTimer();
       },
       onEnd: (reason) => {
-        console.error(`Partida terminada por: ${reason}`);
+        console.log(`Partida terminada por: ${reason}`);
         stopTimer();
       },
     });

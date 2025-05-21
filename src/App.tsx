@@ -13,6 +13,7 @@ import Lecciones from "./pages/lecciones/Lecciones";
 import Ejercicio from "./pages/ejercicios/Ejercicio";
 import EstadoPagina from "./components/Utils/EstadoPagina";
 import Perfil from "./pages/perfil/Perfil";
+import Historial from "./pages/Historial/Historial";
 
 function App() {
   return (
@@ -99,6 +100,14 @@ function App() {
                 element={
                   <ProtectedRoute logged={true}>
                     <EstadoPagina tipo="notFound" />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path="/historial"
+                element={
+                  <ProtectedRoute logged={true}>
+                    <Historial />
                   </ProtectedRoute>
                 }
               ></Route>

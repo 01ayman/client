@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../constants/GlobalConstants";
-import { updateEmail, updateName } from "../services/userService";
+import { updateEmail, updateName, uploadImage } from "../services/userService";
 
 type Usuario = {
   id: number;
@@ -101,6 +101,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUsuario((prev) => ({
             ...prev,
             correo: data.user.correo,
+          }));
+        }
+        break;
+      case "avatar":
+        data = await uploadImage(valorUno);
+        if (data) {
+          setUsuario((prev) => ({
+            ...prev,
+            avatar: data,
           }));
         }
         break;

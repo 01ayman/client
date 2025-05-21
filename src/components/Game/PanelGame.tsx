@@ -31,7 +31,7 @@ const PanelGame = ({
   const [juegoTerminado, setJuegoTerminado] = useState<boolean>(false);
   const [movimientos, setMovimientos] = useState<string[]>([]);
   const { setPartida, setJugadores, partida } = usePartida();
-  const [gameState, setGameState] = useState<any>(null);
+  const [gameState, setGameState] = useState<string | null>(null);
   const { usuario } = useAuth();
   const navigate = useNavigate();
 
@@ -98,6 +98,7 @@ const PanelGame = ({
         nombre: usuario!.nombre,
         elo: usuario!.elo,
         color: "blanco",
+        id: usuario?.id,
       };
 
       const maquina = {
@@ -111,6 +112,7 @@ const PanelGame = ({
         dificultad,
         jugador_b: jugador,
         jugador_n: maquina,
+        fecha: new Date(),
       };
       onReset();
       setPartida(partida);
@@ -226,14 +228,20 @@ const PanelGame = ({
 
   function resign(color: "w" | "b") {
     const winner = color === "w" ? "negras" : "blancas";
+    terminarPartida(
+      partida.id,
+      "abandono",
+      game,
+      partida,
+      movimientos
+    );
     setJuegoTerminado(true);
     setGameState(`El jugador se ha rendido. Ganan las ${winner}.`);
-    terminarPartida(partida.id);
   }
 
   function draw() {
     const winner = game.turn() === "w" ? "blancas" : "negras";
-    terminarPartida(partida.id);
+    terminarPartida(partida.id, "empate", game, partida, movimientos);
     setJuegoTerminado(true);
     setGameState(`El jugador de las ${winner} ofreció tablas`);
     onReset();
@@ -308,7 +316,6 @@ const PanelGame = ({
               onClick={() => {
                 onReset();
                 setPartida(null);
-                terminarPartida(partida.id);
                 reset();
               }}
             >
@@ -324,7 +331,6 @@ const PanelGame = ({
           disabled={game.turn() !== color}
           onClick={() => {
             onReset();
-            terminarPartida(partida.id);
             draw();
           }}
         >
@@ -334,7 +340,6 @@ const PanelGame = ({
           className="panel-boton"
           onClick={() => {
             onReset();
-            terminarPartida(partida.id);
             resign("w");
           }}
         >

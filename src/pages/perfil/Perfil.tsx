@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./Perfil.css";
+import { uploadImage } from "../../services/userService";
 
 const Perfil = () => {
   const { usuario, logout, loading, updateUser } = useAuth();
@@ -29,14 +30,29 @@ const Perfil = () => {
     return `${name[0]}******${name.slice(-1)}@${domain}`;
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files[0]);
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+      console.log(reader);
+
+      // const formData = new FormData();
+      // formData.append(`avatar-${usuario?.id}`, file);
+      // console.log(formData);
+
+      setIsSubmitting(true);
+      try {
+        const image = await updateUser("avatar", file);
+      } catch (error) {
+        console.error("Error al subir el avatar al backend:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -201,7 +217,11 @@ const Perfil = () => {
           <div className="avatar-section">
             <div className="avatar-container">
               <img
-                src={avatarPreview || usuario?.avatar || "https://res.cloudinary.com/dfiucj1to/image/upload/v1746995734/avatar_tuaroe.png"}
+                src={
+                  avatarPreview ||
+                  usuario?.avatar ||
+                  "https://res.cloudinary.com/dfiucj1to/image/upload/v1746995734/avatar_tuaroe.png"
+                }
                 alt="Avatar"
                 className="profile-avatar"
               />

@@ -4,7 +4,7 @@ const getToken = () => {
   return localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken");
 };
 
-const getAuthHeader = () => {
+export const getAuthHeader = () => {
   const token = getToken();
   // console.log(token);
   if (!token) throw new Error("No autenticado");
@@ -36,7 +36,7 @@ export const updateProfile = async (data: {
 
   const response = await fetch(`${API_URL}users/update-profile`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}` }, 
+    headers: { Authorization: `Bearer ${token}` },
     body: formData,
   });
 
@@ -52,7 +52,10 @@ export const updateEmail = async (
     const response = await fetch(`${API_URL}usuarios/update-email`, {
       method: "PATCH",
       headers: getAuthHeader(),
-      body: JSON.stringify({ currentPassword: currentPassword, newEmail: newEmail }),
+      body: JSON.stringify({
+        currentPassword: currentPassword,
+        newEmail: newEmail,
+      }),
     });
 
     if (!response.ok) {
@@ -120,7 +123,7 @@ export const uploadImage = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append("avatar", file);
 
-  const response = await fetch(`${API_URL}users/upload-avatar`, {
+  const response = await fetch(`${API_URL}usuarios/update-avatar`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
     body: formData,
@@ -128,5 +131,18 @@ export const uploadImage = async (file: File): Promise<string> => {
 
   if (!response.ok) throw new Error("Error subiendo imagen");
   const data = await response.json();
+  console.log(data);
   return data.url;
+};
+
+export const getHistory = async () => {
+  try {
+    const res = await fetch(`${API_URL}usuarios/obtener-partidas`, {
+      headers: getAuthHeader(),
+    });
+    const partidas = await res.json();
+    return partidas;
+  } catch (err: any) {
+    console.log(err);
+  }
 };
