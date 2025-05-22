@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Historial.css";
 import { getHistory } from "../../services/userService";
 import { Chessboard } from "react-chessboard";

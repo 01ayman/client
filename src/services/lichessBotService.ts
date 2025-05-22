@@ -1,6 +1,4 @@
-import { Chess } from "chess.js";
 import { API_URL } from "../constants/GlobalConstants";
-import { usePartida } from "../context/PartidaContext";
 import { getAuthHeader } from "./userService";
 
 interface GameSettings {

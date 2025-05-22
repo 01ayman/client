@@ -3,13 +3,11 @@ import { Chess } from "chess.js";
 import Tablero from "../Tablero/Tablero";
 import PanelGame from "./PanelGame";
 import {
-  GameEvent,
   makeMove,
   streamGame,
 } from "../../services/lichessBotService";
 import "./Game.css";
 import { usePartida } from "../../context/PartidaContext";
-import { GameState } from "../../utils/IGame";
 
 const Game = () => {
   const [game, setGame] = useState(new Chess());

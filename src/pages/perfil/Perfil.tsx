@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./Perfil.css";
-import { uploadImage } from "../../services/userService";
 
 const Perfil = () => {
   const { usuario, logout, loading, updateUser } = useAuth();
@@ -47,7 +46,7 @@ const Perfil = () => {
 
       setIsSubmitting(true);
       try {
-        const image = await updateUser("avatar", file);
+        await updateUser("avatar", file);
       } catch (error) {
         console.error("Error al subir el avatar al backend:", error);
       } finally {
